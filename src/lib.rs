@@ -1,6 +1,24 @@
 use sdl3::{
-    EventPump, Sdl, event::Event, init, pixels::Color, rect::Rect, render::Canvas, ttf, video,
+    EventPump, Sdl, event::Event, init, keyboard::Keycode, pixels::Color, rect::Rect,
+    render::Canvas, ttf, video,
 };
+
+pub struct Input {
+    pub quit: bool,
+    pub keys: Vec<Keycode>,
+}
+
+impl Input {
+    pub fn new() -> Self {
+        Self {
+            quit: false,
+            keys: Vec::new(),
+        }
+    }
+    pub fn is_key_down(&self, key: Keycode) -> bool {
+        self.keys.contains(&key)
+    }
+}
 
 pub struct Window {
     pub sdl: Sdl,
@@ -24,15 +42,22 @@ impl Window {
             events,
         }
     }
-    pub fn handle_events(&mut self) -> bool {
+    pub fn handle_events(&mut self, input: &mut Input) {
+        input.keys.clear();
+
         for event in self.events.poll_iter() {
             match event {
-                Event::Quit { .. } => return false,
+                Event::Quit { .. } => input.quit = true,
+                Event::KeyDown {
+                    keycode: Some(key),
+                    repeat: false,
+                    ..
+                } => {
+                    input.keys.push(key);
+                }
                 _ => {}
             }
         }
-
-        true
     }
     pub fn clear(&mut self, color: Color) {
         self.canvas.set_draw_color(color);

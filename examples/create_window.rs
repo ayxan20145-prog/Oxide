@@ -1,5 +1,5 @@
-use oxide::Window;
-use sdl3::{pixels::Color, ttf};
+use oxide::{Input, Window};
+use sdl3::{keyboard::Keycode, pixels::Color, ttf};
 
 fn main() {
     let mut window = Window::create_window("hi", 800, 600);
@@ -9,9 +9,21 @@ fn main() {
         .load_font("assets/JetBrainsMonoNerdFont-Regular.ttf", 32.0)
         .unwrap();
 
+    let mut input = Input::new();
+
     loop {
-        if !window.handle_events() {
+        window.handle_events(&mut input);
+
+        if input.quit {
             break;
+        }
+
+        if input.is_key_down(Keycode::W) {
+            println!("w pressed");
+        }
+
+        if input.is_key_down(Keycode::Space) {
+            println!("space pressed");
         }
 
         window.clear(Color::RGB(255, 255, 255));
