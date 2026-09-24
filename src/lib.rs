@@ -1,4 +1,6 @@
-use sdl3::{EventPump, Sdl, event::Event, init, pixels::Color, rect::Rect, render::Canvas, video};
+use sdl3::{
+    EventPump, Sdl, event::Event, init, pixels::Color, rect::Rect, render::Canvas, ttf, video,
+};
 
 pub struct Window {
     pub sdl: Sdl,
@@ -42,6 +44,16 @@ impl Window {
         let rect = Rect::new(x, y, width, height);
 
         self.canvas.fill_rect(rect).unwrap();
+    }
+    pub fn draw_text(&mut self, font: &ttf::Font, text: &str, x: i32, y: i32, color: Color) {
+        let surface = font.render(text).blended(color).unwrap();
+
+        let idk = self.canvas.texture_creator();
+        let texture = idk.create_texture_from_surface(&surface).unwrap();
+
+        let rect = Rect::new(x, y, surface.width(), surface.height());
+
+        self.canvas.copy(&texture, None, rect).unwrap();
     }
     pub fn present(&mut self) {
         self.canvas.present();
