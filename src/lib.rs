@@ -1,14 +1,8 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+pub fn create_window() {
+    let sdl = sdl3::init().unwrap();
+    let video = sdl.video().unwrap();
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+    let window = video.window("test", 800, 600).build().unwrap();
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+    loop {}
 }
