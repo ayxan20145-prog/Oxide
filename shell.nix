@@ -5,6 +5,9 @@ pkgs.mkShell {
     cmake
     pkg-config
 
+    freetype
+    harfbuzz
+
     libX11
     libXext
     libXcursor
@@ -30,6 +33,8 @@ pkgs.mkShell {
         pkgs.libXtst
         pkgs.libXScrnSaver
         pkgs.libxcb
+        pkgs.freetype
+        pkgs.harfbuzz
       ]
     }:$CMAKE_PREFIX_PATH"
 
@@ -45,6 +50,8 @@ pkgs.mkShell {
         pkgs.libXtst
         pkgs.libXScrnSaver
         pkgs.libxcb
+        pkgs.freetype
+        pkgs.harfbuzz
       ]
     }:$PKG_CONFIG_PATH"
 
@@ -60,6 +67,8 @@ pkgs.mkShell {
         pkgs.libXtst
         pkgs.libXScrnSaver
         pkgs.libxcb
+        pkgs.freetype
+        pkgs.harfbuzz
       ]
     }:$LD_LIBRARY_PATH"
   '';
