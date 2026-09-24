@@ -1,5 +1,7 @@
+use sdl3::{event::Event, init, pixels::Color};
+
 pub fn create_window() {
-    let sdl = sdl3::init().unwrap();
+    let sdl = init().unwrap();
     let video = sdl.video().unwrap();
 
     let _window = video.window("test", 800, 600).build().unwrap();
@@ -10,13 +12,13 @@ pub fn create_window() {
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
-                sdl3::event::Event::Quit { .. } => break 'running,
+                Event::Quit { .. } => break 'running,
                 _ => {}
             }
-
-            canvas.set_draw_color(sdl3::pixels::Color::RGB(255, 255, 255));
-            canvas.clear();
-            canvas.present();
         }
+
+        canvas.set_draw_color(Color::RGB(255, 255, 255));
+        canvas.clear();
+        canvas.present();
     }
 }
