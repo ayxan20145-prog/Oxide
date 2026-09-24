@@ -1,39 +1,47 @@
-use sdl3::{event::Event, init, pixels::Color, rect::Rect, ttf};
+use sdl3::{EventPump, Sdl, event::Event, init, pixels::Color, rect::Rect, render::Canvas, video};
 
-pub fn create_window() {
+pub struct App {
+    pub sdl: Sdl,
+    pub canvas: Canvas<video::Window>,
+    pub events: EventPump,
+}
+
+pub fn create_window(title: &str, width: u32, height: u32) -> App {
     let sdl = init().unwrap();
     let video = sdl.video().unwrap();
-    let ttf = ttf::init().unwrap();
 
-    let window = video.window("test", 800, 600).build().unwrap();
+    let window = video.window(title, width, height).build().unwrap();
 
-    let mut event_pump = sdl.event_pump().unwrap();
-    let mut canvas = window.into_canvas();
+    let events = sdl.event_pump().unwrap();
+    let canvas = window.into_canvas();
 
-    let font = ttf
-        .load_font("assets/JetBrainsMonoNerdFont-Regular.ttf", 32.0)
-        .unwrap();
-
-    let surface = font.render("hello").blended(Color::RGB(0, 0, 0)).unwrap();
-
-    let idk = canvas.texture_creator();
-    let texture = idk.create_texture_from_surface(&surface).unwrap();
-
-    let text_rect = Rect::new(0, 0, surface.width(), surface.height());
-
-    'running: loop {
-        for event in event_pump.poll_iter() {
-            match event {
-                Event::Quit { .. } => break 'running,
-                _ => {}
-            }
-        }
-
-        canvas.set_draw_color(Color::RGB(255, 255, 255));
-        canvas.clear();
-
-        canvas.copy(&texture, None, text_rect).unwrap();
-
-        canvas.present();
+    App {
+        sdl,
+        canvas,
+        events,
     }
+}
+pub fn handle_events(app: &mut App) -> bool {
+    for event in app.events.poll_iter() {
+        match event {
+            Event::Quit { .. } => return false,
+            _ => {}
+        }
+    }
+
+    true
+}
+pub fn clear(app: &mut App, color: Color) {
+    app.canvas.set_draw_color(color);
+    app.canvas.clear();
+}
+pub fn draw_rect(app: &mut App, x: i32, y: i32, width: u32, height: u32, color: Color) {
+    app.canvas.set_draw_color(color);
+
+    let rect = Rect::new(x, y, width, height);
+
+    app.canvas.fill_rect(rect).unwrap();
+}
+pub fn present(app: &mut App) {
+    app.canvas.present();
 }
