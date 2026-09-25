@@ -1,5 +1,5 @@
 [package]
-name = "oxide"
+name = "oxgfx"
 version = "0.5.0"
 edition = "2024"
 

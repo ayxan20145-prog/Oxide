@@ -1,4 +1,4 @@
-use oxide::{Input, Window};
+use oxgfx::{Input, Window};
 use sdl3::{pixels::Color, ttf};
 
 fn main() {

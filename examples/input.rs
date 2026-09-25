@@ -1,4 +1,4 @@
-use oxide::{Input, Window};
+use oxgfx::{Input, Window};
 use sdl3::{keyboard::Keycode, pixels::Color};
 
 fn main() {
