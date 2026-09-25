@@ -14,6 +14,14 @@ impl Input {
     pub fn is_key_down(&self, key: Keycode) -> bool {
         self.keys.contains(&key)
     }
+    pub fn key_down(&mut self, key: Keycode) {
+        if !self.keys.contains(&key) {
+            self.keys.push(key);
+        }
+    }
+    pub fn key_up(&mut self, key: Keycode) {
+        self.keys.retain(|k| *k != key);
+    }
 }
 
 pub struct Window {
@@ -42,8 +50,6 @@ impl Window {
         }
     }
     pub fn handle_events(&mut self, input: &mut Input) {
-        input.keys.clear();
-
         for event in self.events.poll_iter() {
             match event {
                 Event::Quit { .. } => self.quit = true,
@@ -52,7 +58,12 @@ impl Window {
                     repeat: false,
                     ..
                 } => {
-                    input.keys.push(key);
+                    input.key_down(key);
+                }
+                Event::KeyUp {
+                    keycode: Some(key), ..
+                } => {
+                    input.key_up(key);
                 }
                 _ => {}
             }
