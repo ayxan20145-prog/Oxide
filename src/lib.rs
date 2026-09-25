@@ -4,16 +4,12 @@ use sdl3::{
 };
 
 pub struct Input {
-    pub quit: bool,
     pub keys: Vec<Keycode>,
 }
 
 impl Input {
     pub fn new() -> Self {
-        Self {
-            quit: false,
-            keys: Vec::new(),
-        }
+        Self { keys: Vec::new() }
     }
     pub fn is_key_down(&self, key: Keycode) -> bool {
         self.keys.contains(&key)
@@ -24,6 +20,8 @@ pub struct Window {
     pub sdl: Sdl,
     pub canvas: Canvas<video::Window>,
     pub events: EventPump,
+
+    pub quit: bool,
 }
 
 impl Window {
@@ -40,6 +38,7 @@ impl Window {
             sdl,
             canvas,
             events,
+            quit: false,
         }
     }
     pub fn handle_events(&mut self, input: &mut Input) {
@@ -47,7 +46,7 @@ impl Window {
 
         for event in self.events.poll_iter() {
             match event {
-                Event::Quit { .. } => input.quit = true,
+                Event::Quit { .. } => self.quit = true,
                 Event::KeyDown {
                     keycode: Some(key),
                     repeat: false,
